@@ -7,3 +7,6 @@ CHANGE LOG
 
 ## v1.0.1 (2023-11-09)
 * Доработка под shasoft/ci (добавил файл .gitattributes)
+
+## v1.0.2 (2024-06-10)
+* Корректировка файла composer.json

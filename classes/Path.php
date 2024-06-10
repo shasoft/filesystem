@@ -17,6 +17,10 @@ class Path
     // Получить относительный путь от файла $from до файла $to
     public static function relative(string $from, string  $to): string
     {
+        if (file_exists($from) && file_exists($to)) {
+            $from = realpath($from);
+            $to = realpath($to);
+        }
         $from = self::normalize($from);
         $to   = self::normalize($to);
         $from = explode('/', $from);
