@@ -1,28 +1,27 @@
 {
-    "name": "shasoft/filesystem",
-    "type": "library",
-    "description": "File system package",
-    "keywords": [
-        "filesystem",
-        "file",
-        "directory",
-        "path",
-        "php"
-    ],
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Shasoft\\Filesystem\\": "classes"
-        }
-    },
-    "minimum-stability": "dev",
-    "require": {
-        "shasoft/data": "*"
-    },
-    "authors": [
-        {
-            "name": "Shabanov Valera",
-            "email": "shasoft_filesystem@shasoft.com"
-        }
-    ]
+  "name": "shasoft/filesystem",
+  "type": "library",
+  "description": "File system package",
+  "keywords": [
+    "filesystem",
+    "file",
+    "directory",
+    "path",
+    "php"
+  ],
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Shasoft\\Filesystem\\": "classes"
+    }
+  },
+  "require": {
+    "shasoft/data": "*"
+  },
+  "authors": [
+    {
+      "name": "Shabanov Valera",
+      "email": "git-shasoft-filesystem@shasoft.com"
+    }
+  ]
 }
