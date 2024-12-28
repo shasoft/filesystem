@@ -10,6 +10,20 @@ class File
     // Сохранить файл, создав директорию, если она не существует
     public static function save(string $filepath, mixed $data, ?string $format = null, ?int $options = null): int|false
     {
+        // Определить формат данных
+        if (is_null($format)) {
+            $format = Path::ext($filepath);
+        }
+        // Конвертировать данные в строку
+        $str = Str::to($data, $format);
+        // Создать директорию
+        Filesystem::mkdir(dirname($filepath));
+        // Сохранить данные в файл
+        return file_put_contents($filepath, $str);
+    }
+    // Сохранить файл (если данные изменились), создав директорию, если она не существует
+    public static function saveIfModify(string $filepath, mixed $data, ?string $format = null, ?int $options = null): int|false
+    {
         // Создать директорию
         Filesystem::mkdir(dirname($filepath));
         // Определить формат данных
@@ -18,8 +32,14 @@ class File
         }
         // Конвертировать данные в строку
         $str = Str::to($data, $format);
-        // Сохранить данные в файл
-        return file_put_contents($filepath, $str);
+        //
+        if (!file_exists($filepath) || $str != file_get_contents($filepath)) {
+            // Создать директорию
+            Filesystem::mkdir(dirname($filepath));
+            return file_put_contents($filepath, $str);
+        }
+        // Вернуть размер сохраненных данных
+        return strlen($str);
     }
     // Читать файл
     public static function load(string $filepath, mixed $defaultData = null, ?string $format = null): mixed
