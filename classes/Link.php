@@ -9,8 +9,20 @@ class Link
     {
         // Создать директорию (если её нет)
         $rcMkDirTo = Filesystem::mkdir(dirname($to));
-        // Если ссылка существует
-        if (file_exists($to) || is_link($to)) {
+        // Если это ссылка?
+        if (is_link($to)) {
+            // И она существует?
+            if (file_exists($to)) {
+                if (is_dir($to)) {
+                    @rmdir($to);
+                } else {
+                    @unlink($to);
+                }
+            } else {
+                @rmdir($to);
+            }
+        }
+        if (file_exists($to)) {
             // удалить её
             if (is_dir($to)) {
                 $rc = @rmdir($to);
@@ -20,7 +32,7 @@ class Link
                     }
                 }
             } else {
-                $rc = @unlink($to);
+                $rc = unlink($to);
                 if (!$rc) {
                     if (is_link($to)) {
                         $rc = @rmdir($to);
