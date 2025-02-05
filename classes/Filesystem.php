@@ -35,36 +35,47 @@ class Filesystem
             }
         }
     }
+
+    // Это ссылка?
+    public static function hasLink(string $filepath): bool
+    {
+        $link = readlink($filepath);
+        if ($link === false || Path::normalize($link) !== Path::normalize($filepath)) {
+            return true;
+        }
+        return false;
+    }
+
     // Удалить директорию (рекурсивно)
     public static function rmdir(string $path): bool
     {
         //s_dd($path, file_exists($path));
         $ret = true;
+        $path = Path::normalize($path);
         // Директория существует?
         if (file_exists($path)) {
-            if (is_dir($path)) {
-                // Список элементов
-                $items = new \FilesystemIterator($path);
-                // Удалить все элементы директории
-                foreach ($items as $item) {
-                    if (is_dir($item)) {
-                        if (is_link($item)) {
-                            $ret &= rmdir($item);
-                        } else {
+            if (self::hasLink($path)) {
+                if (is_dir($path)) {
+                    $ret &= \rmdir($path);
+                } else {
+                    $ret &= unlink($path);
+                }
+            } else {
+                if (is_dir($path)) {
+                    // Список элементов
+                    $items = new \FilesystemIterator($path);
+                    // Удалить все элементы директории
+                    foreach ($items as $item) {
+                        if (is_dir($item)) {
                             $ret &= self::rmdir($item);
-                        }
-                    } else {
-                        if (!@unlink($item)) {
-                            if (is_link($item)) {
-                                $ret &= \rmdir($item);
-                            }
+                        } else {
+                            $ret &= unlink($item);
                         }
                     }
+                    $ret &= \rmdir($path);
+                } else {
+                    $ret &= unlink($path);
                 }
-                // Удалить
-                $ret &= rmdir($path);
-            } else {
-                $ret &= unlink($path);
             }
         }
         return $ret;

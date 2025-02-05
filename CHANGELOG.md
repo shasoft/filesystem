@@ -12,3 +12,4 @@ CHANGE LOG
 
 ## v1.0.3
 * Добавил функцию File::saveIfModify
+* Добавил функцию Filesystem::rmdir
