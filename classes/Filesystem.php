@@ -47,34 +47,36 @@ class Filesystem
     }
 
     // Удалить директорию (рекурсивно)
-    public static function rmdir(string $path): bool
+    public static function rmdir(string $filepath): bool
     {
         //s_dd($path, file_exists($path));
         $ret = true;
-        $path = Path::normalize($path);
+        $filepath = Path::normalize($filepath);
         // Директория существует?
-        if (file_exists($path)) {
-            if (self::hasLink($path)) {
-                if (is_dir($path)) {
-                    $ret &= \rmdir($path);
+        if (file_exists($filepath)) {
+            if (self::hasLink($filepath)) {
+                if (is_dir($filepath)) {
+                    $ret &= \rmdir($filepath);
                 } else {
-                    $ret &= unlink($path);
+                    $ret &= unlink($filepath);
                 }
             } else {
-                if (is_dir($path)) {
+                if (is_dir($filepath)) {
                     // Список элементов
-                    $items = new \FilesystemIterator($path);
+                    $filepaths = new \FilesystemIterator($filepath);
                     // Удалить все элементы директории
-                    foreach ($items as $item) {
-                        if (is_dir($item)) {
-                            $ret &= self::rmdir($item);
+                    foreach ($filepaths as $_filepath) {
+                        if (is_dir($_filepath)) {
+                            $ret &= self::rmdir($_filepath);
                         } else {
-                            $ret &= unlink($item);
+                            if (!@unlink($_filepath)) {
+                                $ret &= \rmdir($_filepath);
+                            }
                         }
                     }
-                    $ret &= \rmdir($path);
+                    $ret &= \rmdir($filepath);
                 } else {
-                    $ret &= unlink($path);
+                    $ret &= unlink($filepath);
                 }
             }
         }
