@@ -44,17 +44,17 @@ class Link
         if (!file_exists($from)) {
             throw new \Exception(var_export([
                 'source' => __CLASS__ . ':' . __LINE__,
-                'from' => $from,
+                'from' => Path::normalize($from),
                 'file_exists' => file_exists($from),
                 'rcMkDirTo' => $rcMkDirTo,
-                'to' => $to
+                'to' => Path::normalize($to)
             ], true));
         }
         $ret = symlink($from, $to);
         if (!$ret) {
             throw new \Exception(var_export([
-                'from' => $from,
-                'to' => $to
+                'from' => Path::normalize($from),
+                'to' => Path::normalize($to)
             ], true));
         }
         return $ret;
