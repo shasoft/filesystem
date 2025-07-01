@@ -134,4 +134,18 @@ class Filesystem
         }
         return $ret;
     }
+    // Удалить
+    public static function remove(string $filepath): bool
+    {
+        if (file_exists($filepath)) {
+            $origin = Link::originAll($filepath);
+            if (is_dir($origin)) {
+                $rc = @rmdir($filepath);
+            } else {
+                $rc = @unlink($filepath);
+            }
+            return !file_exists($filepath);
+        }
+        return true;
+    }
 }
