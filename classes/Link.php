@@ -62,7 +62,7 @@ class Link
     }
 
     // Создать ссылку
-    public static function creatDeprecated(string $from, string $to): bool
+    public static function createDeprecated(string $from, string $to): bool
     {
         // Создать директорию (если её нет)
         $rcMkDirTo = Filesystem::mkdir(dirname($to));
