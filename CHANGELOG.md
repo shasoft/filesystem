@@ -1,15 +1,19 @@
-CHANGE LOG
-==========
+# CHANGE LOG
 
 ## v1.0 (2023-11-09)
-* Первая версия
+
+- Первая версия
 
 ## v1.0.1 (2023-11-09)
-* Доработка под shasoft/ci (добавил файл .gitattributes)
+
+- Доработка под shasoft/ci (добавил файл .gitattributes)
 
 ## v1.0.2 (2024-06-10)
-* Корректировка файла composer.json
+
+- Корректировка файла composer.json
 
 ## v1.0.3
-* Добавил функцию File::saveIfModify
-* Добавил функцию Filesystem::rmdir
+
+- Добавил функцию File::saveIfModify
+- Добавил функцию Filesystem::rmdir
+- Добавил в File::saveIfModify функцию обработки данных перед сравнением
