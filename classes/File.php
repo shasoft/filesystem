@@ -15,15 +15,20 @@ class File
             $format = Path::ext($filepath);
         }
         // Конвертировать данные в строку
-        $str = Str::to($data, $format);
+        $str = Str::to($data, $format, $options);
         // Создать директорию
         Filesystem::mkdir(dirname($filepath));
         // Сохранить данные в файл
         return file_put_contents($filepath, $str);
     }
     // Сохранить файл (если данные изменились), создав директорию, если она не существует
-    public static function saveIfModify(string $filepath, mixed $data, ?string $format = null, ?int $options = null): int|false
-    {
+    public static function saveIfModify(
+        string $filepath,
+        mixed $data,
+        ?string $format = null,
+        ?int $options = null,
+        ?callable $cbTransform = null
+    ): int|false {
         // Создать директорию
         Filesystem::mkdir(dirname($filepath));
         // Определить формат данных
@@ -31,9 +36,22 @@ class File
             $format = Path::ext($filepath);
         }
         // Конвертировать данные в строку
-        $str = Str::to($data, $format);
+        $str = Str::to($data, $format, $options);
         //
-        if (!file_exists($filepath) || $str != file_get_contents($filepath)) {
+        if (!is_callable($cbTransform)) {
+            $cbTransform  = function (mixed $content): mixed {
+                return $content;
+            };
+        }
+        //
+        if (!file_exists($filepath) || $cbTransform($str) != $cbTransform(file_get_contents($filepath))) {
+            /*
+            $c1 = $cbTransform($str);
+            $c2 = $cbTransform(file_get_contents($filepath));
+            file_put_contents(__DIR__ . '/str.md', $c1);
+            file_put_contents(__DIR__ . '/file.md', $c2);
+            s_dd(strlen($c1), strlen($c2));
+            //*/
             // Создать директорию
             Filesystem::mkdir(dirname($filepath));
             return file_put_contents($filepath, $str);
